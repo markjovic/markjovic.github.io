@@ -28,9 +28,11 @@ main{ padding:20px 20px 40px; }
 #status{ font-size:.9rem; color:var(--muted); margin:0 0 14px; } #status.warn{ color:#9a6a00; }
 ul{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
 li{ background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:14px 16px; display:grid; grid-template-columns:1fr auto; gap:4px 16px; align-items:center; }
-li h2{ font:700 1.4rem/1.05 var(--cond); margin:0; }
-li h2 a{ color:inherit; text-decoration:none; }
-li h2 a:hover{ text-decoration:underline; }
+li h3{ font:700 1.4rem/1.05 var(--cond); margin:0; }
+li h3 a{ color:inherit; text-decoration:none; }
+li h3 a:hover{ text-decoration:underline; }
+section{ margin-bottom:26px; }
+section h2{ font:700 1.7rem/1 var(--cond); margin:0 0 10px; padding-bottom:6px; border-bottom:2px solid var(--line); }
 li p{ margin:0; font-size:.92rem; color:var(--muted); grid-column:1; }
 .go{ grid-row:1 / span 2; grid-column:2; font:700 1rem var(--cond); background:var(--turf); color:#fff; border-radius:6px; padding:9px 14px; text-decoration:none; white-space:nowrap; }
 .meta{ font-size:.8rem; }
@@ -48,13 +50,17 @@ a:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
 </header>
 <main class="wrap">
   <p id="status" role="status">Loading sites&hellip;</p>
-  <ul id="sites"></ul>
+  <div id="sites"></div>
 </main>
 <script>
 (() => {
   const USER = 'markjovic';
   // Any repository with this topic (set under the repo's About > Topics) is left off this page.
   const HIDE_TOPIC = 'unlisted';
+  // A topic starting with this prefix sets the section: hub-footy-games -> "Footy games".
+  // A repository with several such topics appears in each of those sections; one with none goes under OTHER.
+  const CATEGORY_PREFIX = 'hub-';
+  const OTHER = 'Other';
   // Repositories to leave off this page by name, as an alternative to the topic.
   const HIDE = [];
   // Friendlier titles. Descriptions come from each repository's About description;
@@ -65,21 +71,32 @@ a:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
     'worpel-analysis':  ['Worpel history', 'Every past Worpel and Worpel Legends mystery player, recorded daily.'],
   };
   // Used only if GitHub's list of repositories can't be loaded.
-  const FALLBACK = Object.keys(LABELS).map(name => ({ name, description: '', pushed_at: null, html_url: `https://github.com/${USER}/${name}` }));
+  const FALLBACK = Object.keys(LABELS).map(name => ({ name, description: '', topics: ['hub-footy-games'], pushed_at: null, html_url: `https://github.com/${USER}/${name}` }));
 
   const st = document.getElementById('status');
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const siteUrl = name => name.toLowerCase() === `${USER}.github.io` ? `https://${USER}.github.io/` : `https://${USER}.github.io/${name}/`;
   const pretty = name => name.replace(/[-_]+/g, ' ').replace(/^\w/, c => c.toUpperCase());
 
+  const card = r => {
+    const [label, fallback] = LABELS[r.name] ?? [pretty(r.name), ''];
+    const blurb = r.description || fallback;
+    const updated = r.pushed_at ? `Updated ${new Date(r.pushed_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}. ` : '';
+    return `<li><h3><a href="${siteUrl(r.name)}" target="_blank" rel="noopener">${esc(label)}</a></h3><a class="go" href="${siteUrl(r.name)}" target="_blank" rel="noopener">Open</a>
+      <p>${esc(blurb)}</p><p class="meta">${updated}<a href="${esc(r.html_url)}" target="_blank" rel="noopener">Source</a></p></li>`;
+  };
+  const categoriesOf = r => {
+    const cats = (r.topics || []).filter(t => t.startsWith(CATEGORY_PREFIX) && t.length > CATEGORY_PREFIX.length)
+      .map(t => pretty(t.slice(CATEGORY_PREFIX.length)));
+    return cats.length ? [...new Set(cats)] : [OTHER];
+  };
+
   function render(repos) {
-    document.getElementById('sites').innerHTML = repos.map(r => {
-      const [label, fallback] = LABELS[r.name] ?? [pretty(r.name), ''];
-      const title = label, blurb = r.description || fallback;
-      const updated = r.pushed_at ? `Updated ${new Date(r.pushed_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}. ` : '';
-      return `<li><h2><a href="${siteUrl(r.name)}" target="_blank" rel="noopener">${esc(title)}</a></h2><a class="go" href="${siteUrl(r.name)}" target="_blank" rel="noopener">Open</a>
-        <p>${esc(blurb)}</p><p class="meta">${updated}<a href="${esc(r.html_url)}" target="_blank" rel="noopener">Source</a></p></li>`;
-    }).join('');
+    const groups = new Map();
+    for (const r of repos) for (const c of categoriesOf(r)) (groups.get(c) || groups.set(c, []).get(c)).push(r);
+    const order = [...groups.keys()].sort((a, b) => (a === OTHER) - (b === OTHER) || a.localeCompare(b));
+    document.getElementById('sites').innerHTML = order.map(c =>
+      `<section><h2>${esc(c)}</h2><ul>${groups.get(c).map(card).join('')}</ul></section>`).join('');
   }
 
   (async () => {
