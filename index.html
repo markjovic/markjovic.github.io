@@ -53,9 +53,12 @@ a:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
 <script>
 (() => {
   const USER = 'markjovic';
-  // Repositories to leave off this page even though they have a published site.
+  // Any repository with this topic (set under the repo's About > Topics) is left off this page.
+  const HIDE_TOPIC = 'unlisted';
+  // Repositories to leave off this page by name, as an alternative to the topic.
   const HIDE = [];
-  // Friendlier titles and blurbs; anything not listed uses the repository's own name and description.
+  // Friendlier titles. Descriptions come from each repository's About description;
+  // the text here is only used when that description is empty.
   const LABELS = {
     '23-0-ratings':     ['23-0 ratings', 'Exact ratings for every player in the 23-0 AFL game, plus the in-game overlay bookmarklet.'],
     'gridley-analysis': ['Gridley grid analysis', 'Every valid answer and pick rate for each daily Gridley grid, archived nightly.'],
@@ -71,7 +74,8 @@ a:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
 
   function render(repos) {
     document.getElementById('sites').innerHTML = repos.map(r => {
-      const [title, blurb] = LABELS[r.name] ?? [pretty(r.name), r.description ?? ''];
+      const [label, fallback] = LABELS[r.name] ?? [pretty(r.name), ''];
+      const title = label, blurb = r.description || fallback;
       const updated = r.pushed_at ? `Updated ${new Date(r.pushed_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}. ` : '';
       return `<li><h2><a href="${siteUrl(r.name)}">${esc(title)}</a></h2><a class="go" href="${siteUrl(r.name)}">Open</a>
         <p>${esc(blurb)}</p><p class="meta">${updated}<a href="${esc(r.html_url)}">Source</a></p></li>`;
@@ -83,7 +87,7 @@ a:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
       const r = await fetch(`https://api.github.com/users/${USER}/repos?per_page=100&sort=pushed`, { headers: { Accept: 'application/vnd.github+json' } });
       if (!r.ok) throw new Error(`GitHub returned HTTP ${r.status}${r.status === 403 ? ' (hourly request limit reached)' : ''}`);
       const all = await r.json();
-      const sites = all.filter(x => x.has_pages && !x.fork && !x.archived && !HIDE.includes(x.name) && x.name.toLowerCase() !== `${USER}.github.io`);
+      const sites = all.filter(x => x.has_pages && !x.fork && !x.archived && !HIDE.includes(x.name) && !(x.topics || []).includes(HIDE_TOPIC) && x.name.toLowerCase() !== `${USER}.github.io`);
       if (!sites.length) throw new Error('no repositories with a published site were found');
       render(sites);
       st.textContent = `${sites.length} published ${sites.length === 1 ? 'site' : 'sites'}, newest changes first.`;
