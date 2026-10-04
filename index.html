@@ -34,6 +34,11 @@ li h3 a:hover{ text-decoration:underline; }
 section{ margin-bottom:26px; }
 section h2{ font:700 1.7rem/1 var(--cond); margin:0 0 10px; padding-bottom:6px; border-bottom:2px solid var(--line); }
 li p{ margin:0; font-size:.92rem; color:var(--muted); grid-column:1; }
+ul.pages{ grid-column:1; display:block; margin:6px 0 2px; padding-left:18px; list-style:disc; }
+ul.pages li{ display:list-item; background:none; border:0; padding:2px 0; font-size:.95rem; }
+ul.pages li a{ font-weight:600; color:var(--turf); }
+ul.pages li span{ color:var(--muted); font-size:.88rem; }
+p.bad{ color:#b23a2c; }
 .go{ grid-row:1 / span 2; grid-column:2; font:700 1rem var(--cond); background:var(--turf); color:#fff; border-radius:6px; padding:9px 14px; text-decoration:none; white-space:nowrap; }
 .meta{ font-size:.8rem; }
 .meta a{ color:var(--muted); }
@@ -61,6 +66,8 @@ a:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
   // A repository with several such topics appears in each of those sections; one with none goes under OTHER.
   const CATEGORY_PREFIX = 'hub-';
   const OTHER = 'Other';
+  // A repository can list several pages by publishing this file at the root of its site (see README notes).
+  const MANIFEST = 'hub.json';
   // Repositories to leave off this page by name, as an alternative to the topic.
   const HIDE = [];
   // Friendlier titles. Descriptions come from each repository's About description;
@@ -82,9 +89,35 @@ a:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
     const [label, fallback] = LABELS[r.name] ?? [pretty(r.name), ''];
     const blurb = r.description || fallback;
     const updated = r.pushed_at ? `Updated ${new Date(r.pushed_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}. ` : '';
-    return `<li><h3><a href="${siteUrl(r.name)}" target="_blank" rel="noopener">${esc(label)}</a></h3><a class="go" href="${siteUrl(r.name)}" target="_blank" rel="noopener">Open</a>
-      <p>${esc(blurb)}</p><p class="meta">${updated}<a href="${esc(r.html_url)}" target="_blank" rel="noopener">Source</a></p></li>`;
+    const base = siteUrl(r.name);
+    const pages = r.pages?.length
+      ? `<ul class="pages">${r.pages.map(p => `<li><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a>${p.description ? ` <span>${esc(p.description)}</span>` : ''}</li>`).join('')}</ul>` : '';
+    const problem = r.manifestError ? `<p class="bad">${esc(MANIFEST)} problem: ${esc(r.manifestError)}</p>` : '';
+    return `<li><h3><a href="${base}" target="_blank" rel="noopener">${esc(label)}</a></h3><a class="go" href="${base}" target="_blank" rel="noopener">Open</a>
+      <p>${esc(blurb)}</p>${pages}${problem}<p class="meta">${updated}<a href="${esc(r.html_url)}" target="_blank" rel="noopener">Source</a></p></li>`;
   };
+
+  // Reads a repository's hub.json if it has one. No file (404) is normal; anything else wrong is shown on the card.
+  async function loadManifest(r) {
+    const base = siteUrl(r.name);
+    let res;
+    try { res = await fetch(base + MANIFEST, { cache: 'no-cache' }); } catch (e) { r.manifestError = `couldn't be loaded (${e.message})`; return; }
+    if (res.status === 404) return;
+    if (!res.ok) { r.manifestError = `HTTP ${res.status}`; return; }
+    let j; try { j = await res.json(); } catch (e) { r.manifestError = 'is not valid JSON'; return; }
+    if (!Array.isArray(j?.pages)) { r.manifestError = 'has no "pages" list'; return; }
+    const pages = [], bad = [];
+    for (const p of j.pages) {
+      const path = typeof p?.path === 'string' ? p.path.trim() : '';
+      let url = null;
+      try { url = new URL(path, base); } catch (e) {}
+      if (!path || !url || url.origin !== new URL(base).origin || !url.pathname.startsWith(new URL(base).pathname)) { bad.push(path || '(blank path)'); continue; }
+      pages.push({ url: url.href, title: String(p.title || path), description: p.description ? String(p.description) : '' });
+    }
+    r.pages = pages;
+    if (bad.length) r.manifestError = `ignored paths outside this site: ${bad.join(', ')}`;
+  }
+
   const categoriesOf = r => {
     const cats = (r.topics || []).filter(t => t.startsWith(CATEGORY_PREFIX) && t.length > CATEGORY_PREFIX.length)
       .map(t => pretty(t.slice(CATEGORY_PREFIX.length)));
@@ -106,6 +139,7 @@ a:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
       const all = await r.json();
       const sites = all.filter(x => x.has_pages && !x.fork && !x.archived && !HIDE.includes(x.name) && !(x.topics || []).includes(HIDE_TOPIC) && x.name.toLowerCase() !== `${USER}.github.io`);
       if (!sites.length) throw new Error('no repositories with a published site were found');
+      await Promise.all(sites.map(loadManifest));
       render(sites);
       st.textContent = `${sites.length} published ${sites.length === 1 ? 'site' : 'sites'}, newest changes first.`;
     } catch (e) {
