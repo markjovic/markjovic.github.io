@@ -77,8 +77,8 @@ a:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
       const [label, fallback] = LABELS[r.name] ?? [pretty(r.name), ''];
       const title = label, blurb = r.description || fallback;
       const updated = r.pushed_at ? `Updated ${new Date(r.pushed_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}. ` : '';
-      return `<li><h2><a href="${siteUrl(r.name)}">${esc(title)}</a></h2><a class="go" href="${siteUrl(r.name)}">Open</a>
-        <p>${esc(blurb)}</p><p class="meta">${updated}<a href="${esc(r.html_url)}">Source</a></p></li>`;
+      return `<li><h2><a href="${siteUrl(r.name)}" target="_blank" rel="noopener">${esc(title)}</a></h2><a class="go" href="${siteUrl(r.name)}" target="_blank" rel="noopener">Open</a>
+        <p>${esc(blurb)}</p><p class="meta">${updated}<a href="${esc(r.html_url)}" target="_blank" rel="noopener">Source</a></p></li>`;
     }).join('');
   }
 
