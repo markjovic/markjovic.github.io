@@ -1,154 +1,41 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mark Jovic</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>82-0 tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --oval:#14432f; --turf:#1f6b47; --chalk:#f4f6f1; --paper:#ffffff; --ink:#172019; --muted:#5d6b62; --line:#d9e0da; --gold:#e3b23c;
-  --body:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --cond:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){ --chalk:#0f1a14; --paper:#15231b; --ink:#e7ede8; --muted:#9fb1a5; --line:#29392f; --oval:#0c2b1e; --turf:#2c8a5d; }
-}
-:root[data-theme="dark"]{ --chalk:#0f1a14; --paper:#15231b; --ink:#e7ede8; --muted:#9fb1a5; --line:#29392f; --oval:#0c2b1e; --turf:#2c8a5d; }
-:root{ box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
-*,*::before,*::after{ box-sizing:inherit; }
-body{ margin:0; background:var(--chalk); color:var(--ink); font:16px/1.5 var(--body); }
-header{ background:var(--oval); color:#f4f6f1; padding:28px 20px 22px; }
-.wrap{ max-width:820px; margin:0 auto; }
-h1{ font:700 clamp(2.2rem,7vw,3.6rem)/0.95 var(--cond); margin:0; }
-header p{ margin:8px 0 0; color:#cfe0d5; max-width:60ch; }
-main{ padding:20px 20px 40px; }
-#status{ font-size:.9rem; color:var(--muted); margin:0 0 14px; } #status.warn{ color:#9a6a00; }
-ul{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
-li{ background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:14px 16px; display:grid; grid-template-columns:1fr auto; gap:4px 16px; align-items:center; }
-li h3{ font:700 1.4rem/1.05 var(--cond); margin:0; }
-li h3 a{ color:inherit; text-decoration:none; }
-li h3 a:hover{ text-decoration:underline; }
-section{ margin-bottom:26px; }
-section h2{ font:700 1.7rem/1 var(--cond); margin:0 0 10px; padding-bottom:6px; border-bottom:2px solid var(--line); }
-li p{ margin:0; font-size:.92rem; color:var(--muted); grid-column:1; }
-ul.pages{ grid-column:1; display:block; margin:6px 0 2px; padding-left:18px; list-style:disc; }
-ul.pages li{ display:list-item; background:none; border:0; padding:2px 0; font-size:.95rem; }
-ul.pages li a{ font-weight:600; color:var(--turf); }
-ul.pages li span{ color:var(--muted); font-size:.88rem; }
-p.bad{ color:#b23a2c; }
-.go{ grid-row:1 / span 2; grid-column:2; font:700 1rem var(--cond); background:var(--turf); color:#fff; border-radius:6px; padding:9px 14px; text-decoration:none; white-space:nowrap; }
-.meta{ font-size:.8rem; }
-.meta a{ color:var(--muted); }
-a:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
-@media (max-width:520px){ li{ grid-template-columns:1fr; } .go{ grid-row:auto; grid-column:1; justify-self:start; margin-top:6px; } }
-</style>
-</head>
-<body>
-<header>
-  <div class="wrap">
-    <h1>Mark Jovic</h1>
-    <p>Everything I&rsquo;ve published on GitHub, in one place. New sites appear here automatically.</p>
-  </div>
-</header>
+:root{--deep:#1d1d3a;--accent:#fe8000;--chalk:#f6f5f2;--paper:#fff;--ink:#1b1b22;--muted:#5f6070;--line:#dcdbe2;--body:"Barlow",system-ui,sans-serif;--cond:"Barlow Condensed","Arial Narrow",sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--chalk:#121218;--paper:#1c1c26;--ink:#ececf2;--muted:#a5a6b5;--line:#2e2e3c}}
+:root[data-theme="dark"]{--chalk:#121218;--paper:#1c1c26;--ink:#ececf2;--muted:#a5a6b5;--line:#2e2e3c}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--chalk);color:var(--ink);font:16px/1.55 var(--body)}
+header{background:var(--deep);color:#fff;padding:26px 20px 22px}.wrap{max-width:760px;margin:0 auto}
+h1{font:700 clamp(2.2rem,7vw,3.4rem)/.95 var(--cond);margin:0}h1 span{color:var(--accent)}header p{margin:8px 0 0;color:#cfcfe0;max-width:60ch}
+main{padding:20px}.card{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:6px;padding:14px 16px;margin-bottom:16px}
+.btn{font:700 1rem var(--cond);background:var(--accent);color:#fff;border:0;border-radius:6px;padding:9px 14px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.ghost{background:transparent;color:var(--accent);border:1px dashed var(--accent)}#msg{color:var(--muted);font-size:.9rem;margin-left:8px}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}ol{padding-left:20px}
+</style></head><body>
+<header><div class="wrap"><h1><span>82-0</span> tools</h1><p>An overlay for 82-0.com that records each game you play, so the game's hidden scoring can be worked out and turned into pick advice.</p></div></header>
 <main class="wrap">
-  <p id="status" role="status">Loading sites&hellip;</p>
-  <div id="sites"></div>
+<div class="card"><p><strong>Overlay bookmarklet.</strong> Save it as a bookmark&rsquo;s URL, then run it on 82-0.com before your first pick. It only reads what the game already shows you and sends nothing to the game.</p>
+<button class="btn" id="copy" type="button">Copy bookmarklet</button> <a class="btn ghost" id="drag" href="javascript:(()=&gt;{if(window.r820)return;const s=document.createElement(&#x27;script&#x27;);s.src=&#x27;https://markjovic.github.io/82-0-tools/overlay82.js?v=&#x27;+Date.now();s.onerror=()=&gt;alert(&#x27;82-0 overlay could not be loaded from markjovic.github.io (blocked or missing).&#x27;);document.head.append(s)})()">Drag to bookmarks bar</a><span id="msg" aria-live="polite"></span></div>
+<div class="card"><p><strong>Auto-driver bookmarklet.</strong> Plays Classic drafts by itself, following the overlay (desktop, its own tab; stops after 30 games or on anything unexpected; never re-rolls, uses boosters, spends coins or watches ads). Stop it with <code>r82stop()</code> in the console, or reload the tab.</p>
+<button class="btn" id="copyauto" type="button">Copy auto bookmarklet</button><span id="msgauto" aria-live="polite"></span></div>
+<div class="card"><p><strong>Where it&rsquo;s up to.</strong> 82-0 works out your record on its own server, so the formula isn&rsquo;t visible. The overlay logs every finished game in your browser; after about 30 games, export the log and the scoring can be fitted from it.</p></div>
 </main>
 <script>
-(() => {
-  const USER = 'markjovic';
-  // Any repository with this topic (set under the repo's About > Topics) is left off this page.
-  const HIDE_TOPIC = 'unlisted';
-  // A topic starting with this prefix sets the section: hub-footy-games -> "Footy games".
-  // A repository with several such topics appears in each of those sections; one with none goes under OTHER.
-  const CATEGORY_PREFIX = 'hub-';
-  const OTHER = 'Other';
-  // A repository can list several pages by publishing this file at the root of its site (see README notes).
-  const MANIFEST = 'hub.json';
-  // Repositories to leave off this page by name, as an alternative to the topic.
-  const HIDE = [];
-  // Friendlier titles. Descriptions come from each repository's About description;
-  // the text here is only used when that description is empty.
-  const LABELS = {
-    '23-0-ratings':     ['23-0 ratings', 'Exact ratings for every player in the 23-0 AFL game, plus the in-game overlay bookmarklet.'],
-    'gridley-analysis': ['Gridley grid analysis', 'Every valid answer and pick rate for each daily Gridley grid, archived nightly.'],
-    'worpel-analysis':  ['Worpel history', 'Every past Worpel and Worpel Legends mystery player, recorded daily.'],
-  };
-  // Used only if GitHub's list of repositories can't be loaded.
-  const FALLBACK = Object.keys(LABELS).map(name => ({ name, description: '', topics: ['hub-footy-games'], pushed_at: null, html_url: `https://github.com/${USER}/${name}` }));
-
-  const st = document.getElementById('status');
-  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
-  const siteUrl = name => name.toLowerCase() === `${USER}.github.io` ? `https://${USER}.github.io/` : `https://${USER}.github.io/${name}/`;
-  const pretty = name => name.replace(/[-_]+/g, ' ').replace(/^\w/, c => c.toUpperCase());
-
-  const card = r => {
-    const [label, fallback] = LABELS[r.name] ?? [pretty(r.name), ''];
-    const blurb = r.description || fallback;
-    const updated = r.pushed_at ? `Updated ${new Date(r.pushed_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}. ` : '';
-    const base = siteUrl(r.name);
-    const pages = r.pages?.length
-      ? `<ul class="pages">${r.pages.map(p => `<li><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a>${p.description ? ` <span>${esc(p.description)}</span>` : ''}</li>`).join('')}</ul>` : '';
-    const problem = r.manifestError ? `<p class="bad">${esc(MANIFEST)} problem: ${esc(r.manifestError)}</p>` : '';
-    return `<li><h3><a href="${base}" target="_blank" rel="noopener">${esc(label)}</a></h3><a class="go" href="${base}" target="_blank" rel="noopener">Open</a>
-      <p>${esc(blurb)}</p>${pages}${problem}<p class="meta">${updated}<a href="${esc(r.html_url)}" target="_blank" rel="noopener">Source</a></p></li>`;
-  };
-
-  // Reads a repository's hub.json if it has one. No file (404) is normal; anything else wrong is shown on the card.
-  async function loadManifest(r) {
-    const base = siteUrl(r.name);
-    let res;
-    try { res = await fetch(base + MANIFEST, { cache: 'no-cache' }); } catch (e) { r.manifestError = `couldn't be loaded (${e.message})`; return; }
-    if (res.status === 404) return;
-    if (!res.ok) { r.manifestError = `HTTP ${res.status}`; return; }
-    let j; try { j = await res.json(); } catch (e) { r.manifestError = 'is not valid JSON'; return; }
-    if (!Array.isArray(j?.pages)) { r.manifestError = 'has no "pages" list'; return; }
-    const pages = [], bad = [];
-    for (const p of j.pages) {
-      const path = typeof p?.path === 'string' ? p.path.trim() : '';
-      let url = null;
-      try { url = new URL(path, base); } catch (e) {}
-      if (!path || !url || url.origin !== new URL(base).origin || !url.pathname.startsWith(new URL(base).pathname)) { bad.push(path || '(blank path)'); continue; }
-      pages.push({ url: url.href, title: String(p.title || path), description: p.description ? String(p.description) : '' });
-    }
-    r.pages = pages;
-    if (bad.length) r.manifestError = `ignored paths outside this site: ${bad.join(', ')}`;
-  }
-
-  const categoriesOf = r => {
-    const cats = (r.topics || []).filter(t => t.startsWith(CATEGORY_PREFIX) && t.length > CATEGORY_PREFIX.length)
-      .map(t => pretty(t.slice(CATEGORY_PREFIX.length)));
-    return cats.length ? [...new Set(cats)] : [OTHER];
-  };
-
-  function render(repos) {
-    const groups = new Map();
-    for (const r of repos) for (const c of categoriesOf(r)) (groups.get(c) || groups.set(c, []).get(c)).push(r);
-    const order = [...groups.keys()].sort((a, b) => (a === OTHER) - (b === OTHER) || a.localeCompare(b));
-    document.getElementById('sites').innerHTML = order.map(c =>
-      `<section><h2>${esc(c)}</h2><ul>${groups.get(c).map(card).join('')}</ul></section>`).join('');
-  }
-
-  (async () => {
-    try {
-      const r = await fetch(`https://api.github.com/users/${USER}/repos?per_page=100&sort=pushed`, { headers: { Accept: 'application/vnd.github+json' } });
-      if (!r.ok) throw new Error(`GitHub returned HTTP ${r.status}${r.status === 403 ? ' (hourly request limit reached)' : ''}`);
-      const all = await r.json();
-      const sites = all.filter(x => x.has_pages && !x.fork && !x.archived && !HIDE.includes(x.name) && !(x.topics || []).includes(HIDE_TOPIC) && x.name.toLowerCase() !== `${USER}.github.io`);
-      if (!sites.length) throw new Error('no repositories with a published site were found');
-      await Promise.all(sites.map(loadManifest));
-      render(sites);
-      st.textContent = `${sites.length} published ${sites.length === 1 ? 'site' : 'sites'}, newest changes first.`;
-    } catch (e) {
-      render(FALLBACK);
-      st.className = 'warn';
-      st.textContent = `The live list from GitHub couldn't be loaded (${e.message}), so this is the saved list.`;
-    }
-  })();
-})();
-</script>
-</body>
-</html>
+const BOOKMARKLET = "javascript:(()=>{if(window.r820)return;const s=document.createElement('script');s.src='https://markjovic.github.io/82-0-tools/overlay82.js?v='+Date.now();s.onerror=()=>alert('82-0 overlay could not be loaded from markjovic.github.io (blocked or missing).');document.head.append(s)})()";
+document.getElementById('copy').addEventListener('click', async () => {
+  const m = document.getElementById('msg');
+  try { await navigator.clipboard.writeText(BOOKMARKLET); m.textContent = 'Copied ' + BOOKMARKLET.length + ' characters.'; }
+  catch (e) { m.textContent = 'Copy failed (' + e.message + '). Long-press the drag button and copy its link instead.'; }
+});
+const AUTO = "javascript:(()=>{const L=s=>new Promise((o,b)=>{const e=document.createElement('script');e.src=s+'?v='+Date.now();e.onload=o;e.onerror=()=>b(Error('could not load '+s));document.head.append(e)});(async()=>{window.r82dry=false;if(!window.r820)await L('https://markjovic.github.io/82-0-tools/overlay82.js');for(let i=0;i<50&&!(window.r820&&window.r820.version);i++)await new Promise(r=>setTimeout(r,200));if(!window.r820||!window.r820.version)throw Error('overlay did not start');await L('https://markjovic.github.io/82-0-tools/driver82.js')})().catch(e=>alert('82-0 auto: '+e.message))})()";
+document.getElementById('copyauto').addEventListener('click', async () => {
+  const m = document.getElementById('msgauto');
+  try { await navigator.clipboard.writeText(AUTO); m.textContent = ' Copied ' + AUTO.length + ' characters.'; }
+  catch (e) { m.textContent = ' Copy failed (' + e.message + ').'; }
+});
+document.getElementById('drag').addEventListener('click', e => { e.preventDefault(); document.getElementById('msg').textContent = 'Drag this button to your bookmarks bar, or use Copy.'; });
+</script></body></html>
